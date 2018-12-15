@@ -11,7 +11,7 @@ import java.util.List;
 public class QuestionService {
 
     @Autowired
-    QuestionDAO questionDAO;
+    private QuestionDAO questionDAO;
 
     public List<Question> getLatestQuestions(int userId, int offset, int limit){
         return questionDAO.selectLatestQuestions(userId,offset,limit);
