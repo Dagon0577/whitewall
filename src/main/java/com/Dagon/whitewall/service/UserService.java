@@ -35,6 +35,7 @@ public class UserService {
             return map;
         }
 
+        //加密
         user=new User();
         user.setName(userName);
         user.setSalt(UUID.randomUUID().toString().substring(0,10));
@@ -42,6 +43,7 @@ public class UserService {
         user.setPassword(WhitewallUtil.MD5(passWord+user.getSalt()));
         userDAO.addUser(user);
 
+        //登陆
         String ticket=addLoginTicket(user.getId());
         map.put("ticket",ticket);
 
