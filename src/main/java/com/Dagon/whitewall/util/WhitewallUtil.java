@@ -10,6 +10,7 @@ import java.util.Map;
 public class WhitewallUtil {
     private static final Logger logger = LoggerFactory.getLogger(WhitewallUtil.class);
 
+    //匿名id
     public static int ANONYMOUS_USERID=2;
 
     public static String getJSONString(int code,String msg){

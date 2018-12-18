@@ -12,15 +12,18 @@ public interface CommentDAO {
     String SELECT_FIELDS = " id, " + INSERT_FIELDS;
 
     @Insert({"insert into ",TABLE_NAME,"(",INSERT_FIELDS,
-            ") values #{userId},#{content},#{createdDate},#{entityId},#{entityType},#{status})"})
+            ") values (#{userId},#{content},#{createdDate},#{entityId},#{entityType},#{status})"})
     int addComment(Comment comment);
 
     @Update({"update ",TABLE_NAME,"("," set status=#{status} where entity_id=#{entityId} and entity_type=#{entityType}"})
     void updateStatus(@Param("entityId")int entityId,@Param("entityType")int entityType,@Param("status")int status);
 
     @Select({"select ",SELECT_FIELDS," from ",TABLE_NAME,
-            "where entity_id=#{entityId} and entity_type=#{entityType} order by id desc"})
+            "where entity_id=#{entityId} and entity_type=#{entityType} order by id desc "})
+                    //"limit #{offset},#{limit}"})
     List<Comment> selectByEntity(@Param("entityId") int entityId,@Param("entityType")int entityType);
+                                 //@Param("offset")int offset,
+                                 //@Param("limit")int limit);
 
     @Select({"select count(id) from ", TABLE_NAME, " where entity_id=#{entityId} and entity_type=#{entityType} "})
     int getCommentCount(@Param("entityId") int entityId, @Param("entityType") int entityType);

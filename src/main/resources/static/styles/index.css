@@ -14293,11 +14293,11 @@ html.no-touchevents #zu-distraction-free-editor .back:hover,html.no-touchevents 
 .tooltip .tooltip-inner {
     max-width: 300px;
     padding: 3px 8px;
-    color: #fff;
+    color: #202b4e;
     text-align: center;
     text-decoration: none;
     background-color: #000;
-    background-color: rgba(0,0,0,.75);
+    background-color: rgba(193, 226, 228, 0.75);
     border-radius: 4px
 }
 

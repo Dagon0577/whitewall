@@ -1,7 +1,7 @@
 package com.Dagon.whitewall.controller;
 
-import com.Dagon.whitewall.model.HostHolder;
-import com.Dagon.whitewall.model.Question;
+import com.Dagon.whitewall.model.*;
+import com.Dagon.whitewall.service.CommentService;
 import com.Dagon.whitewall.service.QuestionService;
 import com.Dagon.whitewall.service.UserService;
 import com.Dagon.whitewall.util.WhitewallUtil;
@@ -12,7 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 public class QuestionController {
@@ -26,6 +28,9 @@ public class QuestionController {
 
     @Autowired
     HostHolder hostHolder;
+
+    @Autowired
+    CommentService commentService;
 
     @RequestMapping(value = "/question/add",method = {RequestMethod.POST})
     @ResponseBody
@@ -55,7 +60,16 @@ public class QuestionController {
     public String questionDetail(Model model,@PathVariable("qid")int qid){
         Question question=questionService.selectById(qid);
         model.addAttribute("question",question);
-        model.addAttribute("user",userService.getUser(question.getUserId()));
+
+        List<Comment> commentList=commentService.getCommentsByEntity(qid, EntityType.ENTITY_QUESTION);
+        List<ViewObject> comments=new ArrayList<>();
+        for(Comment comment:commentList){
+            ViewObject vo=new ViewObject();
+            vo.set("comment",comment);
+            vo.set("user",userService.getUser(comment.getUserId()));
+            comments.add(vo);
+        }
+        model.addAttribute("comments",comments);
         return "detail";
     }
 }
