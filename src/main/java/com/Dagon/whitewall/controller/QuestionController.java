@@ -2,6 +2,7 @@ package com.Dagon.whitewall.controller;
 
 import com.Dagon.whitewall.model.*;
 import com.Dagon.whitewall.service.CommentService;
+import com.Dagon.whitewall.service.LikeService;
 import com.Dagon.whitewall.service.QuestionService;
 import com.Dagon.whitewall.service.UserService;
 import com.Dagon.whitewall.util.WhitewallUtil;
@@ -31,6 +32,9 @@ public class QuestionController {
 
     @Autowired
     CommentService commentService;
+
+    @Autowired
+    LikeService likeService;
 
     @RequestMapping(value = "/question/add",method = {RequestMethod.POST})
     @ResponseBody
@@ -66,6 +70,13 @@ public class QuestionController {
         for(Comment comment:commentList){
             ViewObject vo=new ViewObject();
             vo.set("comment",comment);
+            if(hostHolder.getUser() == null){
+                vo.set("liked", 0);
+            }else{
+                vo.set("liked", likeService.getLikeStatus(hostHolder.getUser().getId(), EntityType.ENTITY_COMMENT,comment.getId()));
+            }
+
+            vo.set("likeCount", likeService.getLikeCount(EntityType.ENTITY_COMMENT,comment.getId()));
             vo.set("user",userService.getUser(comment.getUserId()));
             comments.add(vo);
         }
