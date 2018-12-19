@@ -104,11 +104,11 @@
 
     编写list，string，hashm，set，sortset的测试用例，熟悉jedis api。
 
-开发点踩和点赞功能，在此之前根据业务封装好jedis的增删改查操作，放在util包中
+    开发点踩和点赞功能，在此之前根据业务封装好jedis的增删改查操作，放在util包中
 
-根据需求确定key字段，格式是 like，entityType，entityId 和 dislike，entityType，entityId
+    根据需求确定key字段，格式是 like，entityType，entityId 和 dislike，entityType，entityId
 
-将喜欢一条新闻的人存在一个集合，不喜欢的存在另一个集合。通过统计数量可以获得点赞和点踩数。
+    将喜欢一条新闻的人存在一个集合，不喜欢的存在另一个集合。通过统计数量可以获得点赞和点踩数。
 
-一般点赞（点踩）操作是先增加likeKey（disLikeKey），然后删除disLikeKey（likeKey），最后返回likeKey集合的数量
+    一般点赞（点踩）操作是先增加likeKey（disLikeKey），然后删除disLikeKey（likeKey），最后返回likeKey集合的数量
 
