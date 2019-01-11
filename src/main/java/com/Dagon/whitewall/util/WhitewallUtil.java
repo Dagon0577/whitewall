@@ -11,7 +11,9 @@ public class WhitewallUtil {
     private static final Logger logger = LoggerFactory.getLogger(WhitewallUtil.class);
 
     //匿名id
-    public static int ANONYMOUS_USERID=2;
+    public static int ANONYMOUS_USERID = 2;
+    //系统id
+    public static int SYSTEM_USERID = 3;
 
     public static String getJSONString(int code,String msg){
         JSONObject json=new JSONObject();

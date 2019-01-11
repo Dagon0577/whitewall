@@ -1,5 +1,8 @@
 package com.Dagon.whitewall.controller;
 
+import com.Dagon.whitewall.async.EventModel;
+import com.Dagon.whitewall.async.EventProducer;
+import com.Dagon.whitewall.async.EventType;
 import com.Dagon.whitewall.service.UserService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -23,6 +26,9 @@ public class LoginController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    EventProducer eventProducer;
 
     @RequestMapping(path = {"/reg/"}, method = {RequestMethod.POST})
     public String reg(Model model,
@@ -63,14 +69,19 @@ public class LoginController {
                         @RequestParam(value="rememberme" ,defaultValue="false") boolean rememberme ,
                         HttpServletResponse response) {
         try {
-            Map<String, String> map = userService.login(username, password);
+            Map<String, Object> map = userService.login(username, password);
             if(map.containsKey("ticket")){
-                Cookie cookie=new Cookie("ticket",map.get("ticket"));
+                Cookie cookie=new Cookie("ticket",map.get("ticket").toString());
                 cookie.setPath("/");
                 if (rememberme) {
                     cookie.setMaxAge(3600*24*5);
                 }
                 response.addCookie(cookie);
+
+                eventProducer.fireEvent(new EventModel(EventType.LOGIN)
+                        .setExt("username", username).setExt("email", "test@qq.com")
+                        .setActorId((int)map.get("userId")));
+
                 if(StringUtils.isNotBlank(next)){
                     return "redirect:"+next;
                 }
