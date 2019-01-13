@@ -1,5 +1,8 @@
 package com.Dagon.whitewall.controller;
 
+import com.Dagon.whitewall.async.EventModel;
+import com.Dagon.whitewall.async.EventProducer;
+import com.Dagon.whitewall.async.EventType;
 import com.Dagon.whitewall.model.Comment;
 import com.Dagon.whitewall.model.EntityType;
 import com.Dagon.whitewall.model.HostHolder;
@@ -29,6 +32,9 @@ public class CommentController {
     @Autowired
     QuestionService questionService;
 
+    @Autowired
+    EventProducer eventProducer;
+
     @RequestMapping(path={"/addComment"},method = {RequestMethod.POST})
     public String addComment(@RequestParam("questionId")int questionId,
                              @RequestParam("content")String content){
@@ -48,6 +54,9 @@ public class CommentController {
 
             int count=commentService.getCommentCount(comment.getEntityId(),comment.getEntityType());
             questionService.updateCommentCount(comment.getEntityId(),count);
+
+            eventProducer.fireEvent(new EventModel(EventType.COMMENT).setActorId(comment.getUserId())
+                    .setEntityId(questionId));
         }catch (Exception e){
             logger.error("增加评论失败" + e.getMessage());
         }

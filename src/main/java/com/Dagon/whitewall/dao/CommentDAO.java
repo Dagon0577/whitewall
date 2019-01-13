@@ -19,7 +19,7 @@ public interface CommentDAO {
     int updateStatus(@Param("id") int id, @Param("status") int status);
 
     @Select({"select ",SELECT_FIELDS," from ",TABLE_NAME,
-            "where entity_id=#{entityId} and entity_type=#{entityType} order by id desc "})
+            "where entity_id=#{entityId} and entity_type=#{entityType} and status=0 order by id desc "})
                     //"limit #{offset},#{limit}"})
     List<Comment> selectByEntity(@Param("entityId") int entityId,@Param("entityType")int entityType);
                                  //@Param("offset")int offset,
@@ -30,4 +30,7 @@ public interface CommentDAO {
 
     @Select({"select ", SELECT_FIELDS," from ", TABLE_NAME, " where id=#{id}"})
     Comment getCommentById(int id);
+
+    @Select({"select count(id) from ", TABLE_NAME, " where user_id=#{userId}"})
+    int getUserCommentCount(int userId);
 }

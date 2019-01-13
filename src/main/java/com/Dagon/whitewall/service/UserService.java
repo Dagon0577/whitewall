@@ -39,7 +39,7 @@ public class UserService {
         user=new User();
         user.setName(userName);
         user.setSalt(UUID.randomUUID().toString().substring(0,10));
-        user.setHeadUrl(String.format("../images/res/head/%d.jpg",new Random().nextInt(26)));
+        user.setHeadUrl(String.format("http://localhost:8080/images/res/head/%d.jpg",new Random().nextInt(26)));
         user.setPassword(WhitewallUtil.MD5(passWord+user.getSalt()));
         userDAO.addUser(user);
 
