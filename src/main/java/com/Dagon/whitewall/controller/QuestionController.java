@@ -1,10 +1,10 @@
 package com.Dagon.whitewall.controller;
 
+import com.Dagon.whitewall.async.EventModel;
+import com.Dagon.whitewall.async.EventProducer;
+import com.Dagon.whitewall.async.EventType;
 import com.Dagon.whitewall.model.*;
-import com.Dagon.whitewall.service.CommentService;
-import com.Dagon.whitewall.service.LikeService;
-import com.Dagon.whitewall.service.QuestionService;
-import com.Dagon.whitewall.service.UserService;
+import com.Dagon.whitewall.service.*;
 import com.Dagon.whitewall.util.WhitewallUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,16 +25,22 @@ public class QuestionController {
     QuestionService questionService;
 
     @Autowired
-    UserService userService;
+    HostHolder hostHolder;
 
     @Autowired
-    HostHolder hostHolder;
+    UserService userService;
 
     @Autowired
     CommentService commentService;
 
     @Autowired
+    FollowService followService;
+
+    @Autowired
     LikeService likeService;
+
+    @Autowired
+    EventProducer eventProducer;
 
     @RequestMapping(value = "/question/add",method = {RequestMethod.POST})
     @ResponseBody
@@ -44,7 +50,7 @@ public class QuestionController {
             question.setContent(content);
             question.setTitle(title);
             question.setCreatedDate(new Date());
-            question.setCommentCount(0);
+            //question.setCommentCount(0);
             if(hostHolder.getUser()==null) {
                 //question.setUserId(WhitewallUtil.ANONYMOUS_USERID);
                 return WhitewallUtil.getJSONString(999);
@@ -52,8 +58,11 @@ public class QuestionController {
                 question.setUserId(hostHolder.getUser().getId());
             }
             if(questionService.addQuestion(question)>0){
+                eventProducer.fireEvent(new EventModel(EventType.ADD_QUESTION)
+                .setActorId(question.getUserId()).setEntityId(question.getId())
+                .setExt("title", question.getTitle()).setExt("content", question.getContent()));
                 return WhitewallUtil.getJSONString(0);
-            };
+            }
         }catch (Exception e){
             logger.error("增加问题失败"+e.getMessage());
         }
@@ -81,6 +90,28 @@ public class QuestionController {
             comments.add(vo);
         }
         model.addAttribute("comments",comments);
+
+        List<ViewObject> followUsers = new ArrayList<ViewObject>();
+        // 获取关注的用户信息
+        List<Integer> users = followService.getFollowers(EntityType.ENTITY_QUESTION, qid, 20);
+        for (Integer userId : users) {
+            ViewObject vo = new ViewObject();
+            User u = userService.getUser(userId);
+            if (u == null) {
+                continue;
+            }
+            vo.set("name", u.getName());
+            vo.set("headUrl", u.getHeadUrl());
+            vo.set("id", u.getId());
+            followUsers.add(vo);
+        }
+        model.addAttribute("followUsers", followUsers);
+        if (hostHolder.getUser() != null) {
+            model.addAttribute("followed", followService.isFollower(hostHolder.getUser().getId(), EntityType.ENTITY_QUESTION, qid));
+        } else {
+            model.addAttribute("followed", false);
+        }
+
         return "detail";
     }
 }

@@ -38,7 +38,7 @@ public class MailSender implements InitializingBean {
             mimeMessageHelper.setSubject(subject);
             mimeMessageHelper.setText(result, true);
             /*注释掉发送登录邮件*/
-            //mailSender.send(mimeMessage);
+            mailSender.send(mimeMessage);
             return true;
         } catch (Exception e) {
             logger.error("发送邮件失败" + e.getMessage());
@@ -50,7 +50,7 @@ public class MailSender implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         mailSender = new JavaMailSenderImpl();
         mailSender.setUsername("1000407262@smail.shnu.edu.cn");
-        mailSender.setPassword("1234567891");
+        mailSender.setPassword("123456789H");
         mailSender.setHost("smtp.exmail.qq.com");
         //mailSender.setHost("smtp.qq.com");
         mailSender.setPort(465);
