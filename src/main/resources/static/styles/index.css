@@ -9688,7 +9688,7 @@ a>.invisible {
     z-index: 20;
     width: 100%;
     height: 45px;
-    background: #000000;
+    background: #3d444c;
     /*background: -webkit-linear-gradient(top,#086ed5,#055db5);
     background: linear-gradient(to bottom,#086ed5,#055db5);
     border-bottom: 1px solid #044e97;
@@ -14293,11 +14293,11 @@ html.no-touchevents #zu-distraction-free-editor .back:hover,html.no-touchevents 
 .tooltip .tooltip-inner {
     max-width: 300px;
     padding: 3px 8px;
-    color: #202b4e;
+    color: #fff;
     text-align: center;
     text-decoration: none;
     background-color: #000;
-    background-color: rgba(193, 226, 228, 0.75);
+    background-color: rgba(0,0,0,.75);
     border-radius: 4px
 }
 
@@ -16587,4 +16587,24 @@ html.no-touchevents .carousel:hover .carousel-navigation-btn {
 .openinapp-instruction-page .inner .instructions .step-content {
     font-size: 12px;
     color: #666
+}
+.zm-profile-section-wrap {
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 1px 0 #f2f4f5;
+}
+.zm-profile-section-list {
+    padding: 0 14px;
+}
+.zm-profile-section-head {
+    overflow: hidden;
+    padding: 7px 14px;
+    border-bottom: 1px solid #EEE;
+}
+.zm-profile-section-name {
+    float: left;
+    font-size: 14px;
+    font-weight: 700;
+    color: #666;
 }

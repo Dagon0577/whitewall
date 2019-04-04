@@ -14,6 +14,16 @@
 - [Schedule 6 -新增异步消息功能 新增邮件发送组件](#Schedule-6)
 
 - [Schedule 7 -新增关注功能，开发关注页面和粉丝页面](#Schedule-7)
+
+- [Schedule 8 -Timeline与新鲜事，推拉模式下的Feed流](#Schedule-8)
+
+- [Schedule 9 -python爬虫v2ex数据](#Schedule-9)
+
+- [Schedule 10 -solr搭建全文搜索引擎](#Schedule-10)
+
+- [Schedule 11 -单元测试与压力测试，项目部署等工作](#Schedule-11)
+
+- [Schedule 12 -产品功能扩展以及技术深度扩展](#Schedule-12)
 ---
 ## Schedule 1
     创建git仓库，本地配置idea并测试pull和push。
