@@ -5,3 +5,7 @@ out/
 *.iws
 *.iml
 /bin
+target/
+.classpath
+.settings/
+.project
