@@ -31,11 +31,18 @@
 ---
 ## 快速开始
 
-根据`application.properties`文件中的mysql配置，在localhost:3306端口下启动mysql8，并且创建一个数据库whitewall，
-接着去执行文件`whitewall/src/test/resources/init-schema.sql`，接着根据`whitewall/src/main/java/com.Dagon.whitewall/util/JedisAdapter`文件中配置的redis连接池，在localhost:6379启动redis服务。
-接着就可以初步启动项目了。
+在localhost:3306端口下启动mysql8，创建数据库whitewall，执行SQL表文件。(默认用户为root，密码为dagon)
 
-启动成功如下：
+在localhost:6379启动redis服务(默认使用10数据库)
+
+相关配置文件：
+
+    whitewall/src/main/resources/application.properties
+    whitewall/src/test/resources/init-schema.sql
+    whitewall/src/main/java/com.Dagon.whitewall/util/JedisAdapter
+    
+
+**启动成功如下：**
 
 ![index](src/main/resources/static/images/res/index.png)
 
