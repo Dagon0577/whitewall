@@ -1,4 +1,10 @@
 # whitewall
+[![GitHub issues](https://img.shields.io/github/issues/Dagon0577/whitewall.svg)](https://github.com/Dagon0577/whitewall/issues)
+[![GitHub forks](https://img.shields.io/github/watchers/Dagon0577/whitewall.svg)](https://github.com/Dagon0577/whitewall/watchers)
+[![GitHub forks](https://img.shields.io/github/forks/Dagon0577/whitewall.svg)](https://github.com/Dagon0577/whitewall/network/members)
+[![GitHub stars](https://img.shields.io/github/stars/Dagon0577/whitewall.svg)](https://github.com/Dagon0577/whitewall/stargazers)
+[![GitHub license](https://img.shields.io/github/license/Dagon0577/whitewall.svg)](https://github.com/Dagon0577/whitewall/blob/master/LICENSE)
+
 基于SpringBoot的高校表白墙社交系统
 
 - [快速开始](#快速开始)
