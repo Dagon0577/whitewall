@@ -22,6 +22,7 @@ import java.util.*;
 
 
 public class IndexController {
+
     private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
 
     @Autowired
@@ -37,9 +38,9 @@ public class IndexController {
     @RequestMapping(path = {"/profile/{groupId}/{userId}"})
     @ResponseBody
     public String profile(@PathVariable("userId") int userId,
-                          @PathVariable("groupId") String groupId,
-                          @RequestParam(value = "type", defaultValue = "1") int type,
-                          @RequestParam(value = "key", required = false) String key) {
+        @PathVariable("groupId") String groupId,
+        @RequestParam(value = "type", defaultValue = "1") int type,
+        @RequestParam(value = "key", required = false) String key) {
         return String.format("Profile Page of %s / %d, t:%d k: %s", groupId, userId, type, key);
     }
 
@@ -61,9 +62,9 @@ public class IndexController {
     @RequestMapping(path = {"/request"}, method = {RequestMethod.GET})
     @ResponseBody
     public String request(Model model, HttpServletResponse response,
-                          HttpServletRequest request,
-                          HttpSession httpSession,
-                          @CookieValue("JSESSIONID") String sessionId) {
+        HttpServletRequest request,
+        HttpSession httpSession,
+        @CookieValue("JSESSIONID") String sessionId) {
         StringBuilder sb = new StringBuilder();
         sb.append("COOKIEVALUE:" + sessionId);
         Enumeration<String> headerNames = request.getHeaderNames();
@@ -89,13 +90,13 @@ public class IndexController {
 
     @RequestMapping(path = {"/redirect/{code}"}, method = {RequestMethod.GET})
     public RedirectView redirect(@PathVariable("code") int code,
-                                 HttpSession httpSession) {
+        HttpSession httpSession) {
         httpSession.setAttribute("msg", "jump from redirect");
         RedirectView red = new RedirectView("/", true);
         if (code == 301) {
             red.setStatusCode(HttpStatus.MOVED_PERMANENTLY);
         }
-        return  red;
+        return red;
     }
 
     @RequestMapping(path = {"/admin"}, method = {RequestMethod.GET})
@@ -104,7 +105,7 @@ public class IndexController {
         if ("admin".equals(key)) {
             return "hello admin";
         }
-        throw  new IllegalArgumentException("参数不对");
+        throw new IllegalArgumentException("参数不对");
     }
 
     @ExceptionHandler()

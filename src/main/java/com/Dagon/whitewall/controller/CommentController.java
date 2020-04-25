@@ -21,6 +21,7 @@ import java.util.Date;
 
 @Controller
 public class CommentController {
+
     private static final Logger logger = LoggerFactory.getLogger(CommentController.class);
 
     @Autowired
@@ -35,9 +36,9 @@ public class CommentController {
     @Autowired
     EventProducer eventProducer;
 
-    @RequestMapping(path={"/addComment"},method = {RequestMethod.POST})
-    public String addComment(@RequestParam("questionId")int questionId,
-                             @RequestParam("content")String content){
+    @RequestMapping(path = {"/addComment"}, method = {RequestMethod.POST})
+    public String addComment(@RequestParam("questionId") int questionId,
+        @RequestParam("content") String content) {
         try {
             Comment comment = new Comment();
             comment.setContent(content);
@@ -52,12 +53,14 @@ public class CommentController {
             comment.setEntityType(EntityType.ENTITY_QUESTION);
             commentService.addComment(comment);
 
-            int count=commentService.getCommentCount(comment.getEntityId(),comment.getEntityType());
-            questionService.updateCommentCount(comment.getEntityId(),count);
+            int count = commentService
+                .getCommentCount(comment.getEntityId(), comment.getEntityType());
+            questionService.updateCommentCount(comment.getEntityId(), count);
 
-            eventProducer.fireEvent(new EventModel(EventType.COMMENT).setActorId(comment.getUserId())
+            eventProducer
+                .fireEvent(new EventModel(EventType.COMMENT).setActorId(comment.getUserId())
                     .setEntityId(questionId));
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("增加评论失败" + e.getMessage());
         }
         return "redirect:/question/" + questionId;

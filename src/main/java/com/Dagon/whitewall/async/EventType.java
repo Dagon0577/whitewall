@@ -10,6 +10,12 @@ public enum EventType {
     ADD_QUESTION(6);
 
     private int value;
-    EventType(int value) { this.value = value; }
-    public int getValue() { return value; }
+
+    EventType(int value) {
+        this.value = value;
+    }
+
+    public int getValue() {
+        return value;
+    }
 }

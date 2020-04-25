@@ -21,6 +21,7 @@ import java.util.List;
 
 @Controller
 public class SearchController {
+
     private static final Logger logger = LoggerFactory.getLogger(SearchController.class);
 
     @Autowired
@@ -35,12 +36,13 @@ public class SearchController {
     @Autowired
     QuestionService questionService;
 
-    @RequestMapping(path={"/search"},method = {RequestMethod.GET})
+    @RequestMapping(path = {"/search"}, method = {RequestMethod.GET})
     public String search(Model model, @RequestParam("q") String keyword,
-                         @RequestParam(value = "offset", defaultValue = "0") int offset,
-                         @RequestParam(value = "count", defaultValue = "10") int count){
+        @RequestParam(value = "offset", defaultValue = "0") int offset,
+        @RequestParam(value = "count", defaultValue = "10") int count) {
         try {
-            List<Question> questionList = searchService.searchQuestion(keyword, offset, count, "<em>", "</em>");
+            List<Question> questionList = searchService
+                .searchQuestion(keyword, offset, count, "<em>", "</em>");
             List<ViewObject> vos = new ArrayList<>();
             for (Question question : questionList) {
                 Question q = questionService.getById(question.getId());
@@ -52,13 +54,14 @@ public class SearchController {
                     q.setTitle(question.getTitle());
                 }
                 vo.set("question", q);
-                vo.set("followCount", followService.getFollowerCount(EntityType.ENTITY_QUESTION, question.getId()));
+                vo.set("followCount",
+                    followService.getFollowerCount(EntityType.ENTITY_QUESTION, question.getId()));
                 vo.set("user", userService.getUser(q.getUserId()));
                 vos.add(vo);
             }
             model.addAttribute("vos", vos);
             model.addAttribute("keyword", keyword);
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("搜索评论失败" + e.getMessage());
         }
         return "result";

@@ -13,7 +13,8 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
-public class AddQuestionHandler implements EventHandler{
+public class AddQuestionHandler implements EventHandler {
+
     private static final Logger logger = LoggerFactory.getLogger(AddQuestionHandler.class);
 
     @Autowired
@@ -23,7 +24,7 @@ public class AddQuestionHandler implements EventHandler{
     public void doHandle(EventModel model) {
         try {
             searchService.indexQuestion(model.getEntityId(),
-                    model.getExt("title"), model.getExt("content"));
+                model.getExt("title"), model.getExt("content"));
         } catch (Exception e) {
             logger.error("增加题目索引失败");
         }

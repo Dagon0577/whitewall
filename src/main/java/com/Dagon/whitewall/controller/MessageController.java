@@ -23,7 +23,8 @@ import java.util.List;
 
 @Controller
 public class MessageController {
-    private static final Logger logger= LoggerFactory.getLogger(MessageController.class);
+
+    private static final Logger logger = LoggerFactory.getLogger(MessageController.class);
 
     @Autowired
     HostHolder hostHolder;
@@ -34,21 +35,21 @@ public class MessageController {
     @Autowired
     UserService userService;
 
-    @RequestMapping(path = {"/msg/addMessage"},method = {RequestMethod.POST})
+    @RequestMapping(path = {"/msg/addMessage"}, method = {RequestMethod.POST})
     @ResponseBody
     public String addMessage(@RequestParam("toName") String toName,
-                             @RequestParam("content") String content){
-        try{
-            if(hostHolder.getUser()==null){
-                return WhitewallUtil.getJSONString(999,"未登录");
+        @RequestParam("content") String content) {
+        try {
+            if (hostHolder.getUser() == null) {
+                return WhitewallUtil.getJSONString(999, "未登录");
             }
 
-            User user=userService.selectByName(toName);
-            if(user == null){
-                return WhitewallUtil.getJSONString(1,"用户不存在");
+            User user = userService.selectByName(toName);
+            if (user == null) {
+                return WhitewallUtil.getJSONString(1, "用户不存在");
             }
 
-            Message message=new Message();
+            Message message = new Message();
             message.setCreatedDate(new Date());
             message.setFromId(hostHolder.getUser().getId());
             message.setToId(user.getId());
@@ -56,15 +57,15 @@ public class MessageController {
             messageService.addMessage(message);
             return WhitewallUtil.getJSONString(0);
 
-        }catch (Exception e){
-            logger.error("发送消息失败"+e.getMessage());
-            return WhitewallUtil.getJSONString(1,"发送信息失败");
+        } catch (Exception e) {
+            logger.error("发送消息失败" + e.getMessage());
+            return WhitewallUtil.getJSONString(1, "发送信息失败");
         }
 
     }
 
-    @RequestMapping(path = {"/msg/list"},method = {RequestMethod.GET})
-    public String getConversationList(Model model){
+    @RequestMapping(path = {"/msg/list"}, method = {RequestMethod.GET})
+    public String getConversationList(Model model) {
         try {
             int localUserId = hostHolder.getUser().getId();
             List<Message> conversationList = messageService.getConversationList(localUserId, 0, 10);
@@ -72,37 +73,42 @@ public class MessageController {
             for (Message message : conversationList) {
                 ViewObject vo = new ViewObject();
                 vo.set("conversation", message);
-                int targetId = message.getFromId() == localUserId ? message.getToId() : message.getFromId();
+                int targetId =
+                    message.getFromId() == localUserId ? message.getToId() : message.getFromId();
                 vo.set("user", userService.getUser(targetId));
-                vo.set("unread", messageService.getConversationUnreadCount(localUserId, message.getConversationId()));
+                vo.set("unread",
+                    messageService
+                        .getConversationUnreadCount(localUserId, message.getConversationId()));
                 conversations.add(vo);
             }
             model.addAttribute("conversations", conversations);
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("获取站内信列表失败" + e.getMessage());
         }
         return "letter";
     }
 
-    @RequestMapping(path = {"/msg/detail"},method = {RequestMethod.GET})
-    public String getConversationDetail(Model model ,@RequestParam("conversationId") String conversationId){
-        try{
-            List<Message> conversationList=messageService.getConversationDetail(conversationId,0,10);
-            List<ViewObject> messages=new ArrayList<>();
-            for(Message message :conversationList){
-                ViewObject vo=new ViewObject();
-                vo.set("message",message);
-                User user=userService.getUser(message.getFromId());
-                if(user == null){
+    @RequestMapping(path = {"/msg/detail"}, method = {RequestMethod.GET})
+    public String getConversationDetail(Model model,
+        @RequestParam("conversationId") String conversationId) {
+        try {
+            List<Message> conversationList = messageService
+                .getConversationDetail(conversationId, 0, 10);
+            List<ViewObject> messages = new ArrayList<>();
+            for (Message message : conversationList) {
+                ViewObject vo = new ViewObject();
+                vo.set("message", message);
+                User user = userService.getUser(message.getFromId());
+                if (user == null) {
                     continue;
                 }
-                vo.set("headUrl",user.getHeadUrl());
-                vo.set("userId",user.getId());
+                vo.set("headUrl", user.getHeadUrl());
+                vo.set("userId", user.getId());
                 messageService.updateHasRead(message.getId());
                 messages.add(vo);
             }
-            model.addAttribute("messages",messages);
-        }catch (Exception e){
+            model.addAttribute("messages", messages);
+        } catch (Exception e) {
             logger.error("获取详情消息失败" + e.getMessage());
         }
         return "letterDetail";

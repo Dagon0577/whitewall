@@ -10,24 +10,25 @@ import java.util.List;
 
 @Service
 public class CommentService {
+
     @Autowired
     CommentDAO commentDAO;
 
     @Autowired
     SensitiveService sensitiveService;
 
-    public List<Comment> getCommentsByEntity(int entityId, int entityType){
-        return commentDAO.selectByEntity(entityId,entityType);
+    public List<Comment> getCommentsByEntity(int entityId, int entityType) {
+        return commentDAO.selectByEntity(entityId, entityType);
     }
 
-    public int addComment(Comment comment){
+    public int addComment(Comment comment) {
         comment.setContent(HtmlUtils.htmlEscape(comment.getContent()));
         comment.setContent(sensitiveService.filter(comment.getContent()));
-        return commentDAO.addComment(comment) > 0 ? comment.getId():0;
+        return commentDAO.addComment(comment) > 0 ? comment.getId() : 0;
     }
 
-    public int getCommentCount(int entityId,int entityType){
-        return commentDAO.getCommentCount(entityId,entityType);
+    public int getCommentCount(int entityId, int entityType) {
+        return commentDAO.getCommentCount(entityId, entityType);
     }
 
     public int getUserCommentCount(int userId) {

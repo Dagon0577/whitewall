@@ -16,24 +16,29 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 
 @Component
-public class LoginRequredInterceptor implements HandlerInterceptor{
+public class LoginRequredInterceptor implements HandlerInterceptor {
 
     @Autowired
     HostHolder hostHolder;
 
     @Override
-    public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
-        if(hostHolder.getUser()==null){
-            httpServletResponse.sendRedirect("/reglogin?next="+httpServletRequest.getRequestURI());
+    public boolean preHandle(HttpServletRequest httpServletRequest,
+        HttpServletResponse httpServletResponse, Object o) throws Exception {
+        if (hostHolder.getUser() == null) {
+            httpServletResponse
+                .sendRedirect("/reglogin?next=" + httpServletRequest.getRequestURI());
         }
         return true;
     }
 
     @Override
-    public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView) throws Exception {
+    public void postHandle(HttpServletRequest httpServletRequest,
+        HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView)
+        throws Exception {
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
+    public void afterCompletion(HttpServletRequest httpServletRequest,
+        HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
     }
 }

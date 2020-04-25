@@ -18,6 +18,7 @@ import java.util.Properties;
 
 @Service
 public class MailSender implements InitializingBean {
+
     private static final Logger logger = LoggerFactory.getLogger(MailSender.class);
     private JavaMailSenderImpl mailSender;
 
@@ -25,14 +26,14 @@ public class MailSender implements InitializingBean {
     private VelocityEngine velocityEngine;
 
     public boolean sendWithHTMLTemplate(String to, String subject,
-                                        String template, Map<String, Object> model) {
+        String template, Map<String, Object> model) {
         try {
             String nick = MimeUtility.encodeText("高校表白墙");
             InternetAddress from = new InternetAddress(nick + "<1000407262@smail.shnu.edu.cn>");
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
             String result = VelocityEngineUtils
-                    .mergeTemplateIntoString(velocityEngine, template, "UTF-8", model);
+                .mergeTemplateIntoString(velocityEngine, template, "UTF-8", model);
             mimeMessageHelper.setTo(to);
             mimeMessageHelper.setFrom(from);
             mimeMessageHelper.setSubject(subject);

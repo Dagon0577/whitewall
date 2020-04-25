@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import java.util.Date;
 
 public class Feed {
+
     private int id;
     private int type;
     private int userId;
@@ -52,6 +53,7 @@ public class Feed {
         this.data = data;
         dataJSON = JSONObject.parseObject(data);
     }
+
     public String get(String key) {
         return dataJSON == null ? null : dataJSON.getString(key);
     }

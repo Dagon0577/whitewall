@@ -14,8 +14,9 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class JedisAdapter implements InitializingBean{
-    private static final Logger logger= LoggerFactory.getLogger(JedisAdapter.class);
+public class JedisAdapter implements InitializingBean {
+
+    private static final Logger logger = LoggerFactory.getLogger(JedisAdapter.class);
 
     private JedisPool pool;
 
@@ -24,60 +25,60 @@ public class JedisAdapter implements InitializingBean{
         pool = new JedisPool("redis://localhost:6379/10");
     }
 
-    public long sadd(String key, String value){
+    public long sadd(String key, String value) {
         Jedis jedis = null;
-        try{
+        try {
             jedis = pool.getResource();
             return jedis.sadd(key, value);
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("发生异常" + e.getMessage());
-        }finally {
-            if(jedis != null){
+        } finally {
+            if (jedis != null) {
                 jedis.close();
             }
         }
         return 0;
     }
 
-    public long srem(String key, String value){
+    public long srem(String key, String value) {
         Jedis jedis = null;
-        try{
+        try {
             jedis = pool.getResource();
             return jedis.srem(key, value);
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("发生异常" + e.getMessage());
-        }finally {
-            if(jedis != null){
+        } finally {
+            if (jedis != null) {
                 jedis.close();
             }
         }
         return 0;
     }
 
-    public long scard(String key){
-        Jedis jedis=null;
-        try{
+    public long scard(String key) {
+        Jedis jedis = null;
+        try {
             jedis = pool.getResource();
             return jedis.scard(key);
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("发生异常" + e.getMessage());
-        }finally {
-            if(jedis != null){
+        } finally {
+            if (jedis != null) {
                 jedis.close();
             }
         }
         return 0;
     }
 
-    public boolean sismember(String key, String value){
-        Jedis jedis=null;
-        try{
+    public boolean sismember(String key, String value) {
+        Jedis jedis = null;
+        try {
             jedis = pool.getResource();
             return jedis.sismember(key, value);
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("发生异常" + e.getMessage());
-        }finally {
-            if(jedis != null){
+        } finally {
+            if (jedis != null) {
                 jedis.close();
             }
         }
@@ -101,46 +102,46 @@ public class JedisAdapter implements InitializingBean{
 
     public List<String> brpop(int timeout, String key) {
         Jedis jedis = null;
-        try{
+        try {
             jedis = pool.getResource();
             return jedis.brpop(timeout, key);
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("发生异常" + e.getMessage());
-        }finally {
-            if(jedis != null){
+        } finally {
+            if (jedis != null) {
                 jedis.close();
             }
         }
         return null;
     }
 
-    public Jedis getJedis(){
+    public Jedis getJedis() {
         return pool.getResource();
     }
 
-    public Transaction multi(Jedis jedis){
-        try{
+    public Transaction multi(Jedis jedis) {
+        try {
             return jedis.multi();
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("发生异常" + e.getMessage());
         }
         return null;
     }
 
-    public List<Object> exec(Transaction tx, Jedis jedis){
-        try{
+    public List<Object> exec(Transaction tx, Jedis jedis) {
+        try {
             return tx.exec();
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("发生异常" + e.getMessage());
-        }finally {
-            if(tx != null) {
-                try{
+        } finally {
+            if (tx != null) {
+                try {
                     tx.close();
-                }catch (IOException ioe){
+                } catch (IOException ioe) {
                     logger.error("发生异常" + ioe.getMessage());
                 }
             }
-            if(jedis != null){
+            if (jedis != null) {
                 jedis.close();
             }
         }
@@ -177,7 +178,7 @@ public class JedisAdapter implements InitializingBean{
         return 0;
     }
 
-    public Set<String> zrevrange(String key, int start, int end){
+    public Set<String> zrevrange(String key, int start, int end) {
         Jedis jedis = null;
         try {
             jedis = pool.getResource();
@@ -192,7 +193,7 @@ public class JedisAdapter implements InitializingBean{
         return null;
     }
 
-    public long zcard(String key){
+    public long zcard(String key) {
         Jedis jedis = null;
         try {
             jedis = pool.getResource();
@@ -207,7 +208,7 @@ public class JedisAdapter implements InitializingBean{
         return 0;
     }
 
-    public Double zscore(String key, String member){
+    public Double zscore(String key, String member) {
         Jedis jedis = null;
         try {
             jedis = pool.getResource();
@@ -223,36 +224,34 @@ public class JedisAdapter implements InitializingBean{
     }
 
 
-
-
-    public static void print(int index, Object obj){
+    public static void print(int index, Object obj) {
         System.out.println(String.format("%d, %s", index, obj.toString()));
     }
 
-    public static void main(String[] args){
-        Jedis jedis=new Jedis("redis://localhost:6379/9");
+    public static void main(String[] args) {
+        Jedis jedis = new Jedis("redis://localhost:6379/9");
         jedis.flushDB();
 
         //get set
-        jedis.set("hello","world");
-        print(1,jedis.get("hello"));
-        jedis.rename("hello","newhello");
-        print(1,jedis.get("newhello"));
-        jedis.setex("hello2",15,"world");
+        jedis.set("hello", "world");
+        print(1, jedis.get("hello"));
+        jedis.rename("hello", "newhello");
+        print(1, jedis.get("newhello"));
+        jedis.setex("hello2", 15, "world");
 
         //list
-        jedis.set("pv","100");
+        jedis.set("pv", "100");
         jedis.incr("pv");
-        jedis.incrBy("pv",10);
-        print(2,jedis.get("pv"));
-        jedis.decrBy("pv",5);
-        print(2,jedis.get("pv"));
+        jedis.incrBy("pv", 10);
+        print(2, jedis.get("pv"));
+        jedis.decrBy("pv", 5);
+        print(2, jedis.get("pv"));
 
-        print(3,jedis.keys("*"));
+        print(3, jedis.keys("*"));
 
         String listName = "list";
         jedis.del(listName);
-        for(int i=0; i < 10; ++i){
+        for (int i = 0; i < 10; ++i) {
             jedis.lpush(listName, "a" + String.valueOf(i));
         }
         print(4, jedis.lrange(listName, 0, 12));
@@ -286,18 +285,18 @@ public class JedisAdapter implements InitializingBean{
         //set
         String likeKey1 = "commentLike1";
         String likeKey2 = "commentLike2";
-        for(int i = 0; i < 10; ++i){
+        for (int i = 0; i < 10; ++i) {
             jedis.sadd(likeKey1, String.valueOf(i));
-            jedis.sadd(likeKey2, String.valueOf(i*i));
+            jedis.sadd(likeKey2, String.valueOf(i * i));
         }
         print(20, jedis.smembers(likeKey1));
         print(21, jedis.smembers(likeKey2));
         print(22, jedis.sunion(likeKey1, likeKey2));
         print(23, jedis.sdiff(likeKey1, likeKey2));
         print(24, jedis.sinter(likeKey1, likeKey2));
-        print(25, jedis.sismember(likeKey1,"12"));
-        print(26, jedis.sismember(likeKey2,"16"));
-        jedis.srem(likeKey1,"5");
+        print(25, jedis.sismember(likeKey1, "12"));
+        print(26, jedis.sismember(likeKey2, "16"));
+        jedis.srem(likeKey1, "5");
         print(27, jedis.smembers(likeKey1));
         jedis.smove(likeKey2, likeKey1, "25");
         print(28, jedis.smembers(likeKey1));
@@ -323,7 +322,7 @@ public class JedisAdapter implements InitializingBean{
         print(36, jedis.zrange(rankKey, 0, 10));
         print(36, jedis.zrange(rankKey, 1, 3));
         print(36, jedis.zrevrange(rankKey, 0, 3));
-        for(Tuple tuple : jedis.zrangeByScoreWithScores(rankKey, "60", "100")){
+        for (Tuple tuple : jedis.zrangeByScoreWithScores(rankKey, "60", "100")) {
             print(37, tuple.getElement() + ":" + String.valueOf(tuple.getScore()));
         }
 

@@ -1,6 +1,10 @@
 # whitewall
 基于SpringBoot的高校表白墙社交系统
 
+- [快速开始](#快速开始)
+
+搭建步骤
+
 - [Schedule 1 -搭建环境](#Schedule-1)
 
 - [Schedule 2 -基本框架开发/IOC和AOP/数据库配置和首页的创建/用户注册登录以及使用token](#Schedule-2)
@@ -25,6 +29,16 @@
 
 - [Schedule 12 -产品功能扩展以及技术深度扩展](#Schedule-12)
 ---
+## 快速开始
+
+根据`application.properties`文件中的mysql配置，在localhost:3306端口下启动mysql8，并且创建一个数据库whitewall，
+接着去执行文件`whitewall/src/test/resources/init-schema.sql`，接着根据`whitewall/src/main/java/com.Dagon.whitewall/util/JedisAdapter`文件中配置的redis连接池，在localhost:6379启动redis服务。
+接着就可以初步启动项目了。
+
+启动成功如下：
+
+![index](src/main/resources/static/images/res/index.png)
+
 ## Schedule 1
     创建git仓库，本地配置idea并测试pull和push。
     
@@ -61,7 +75,7 @@
 
     mybatis-spring-boot-starter使用1.1.1
 
-    mysql-connector-java使用5.1.7
+    mysql-connector-java使用8.0.19
 
     亲测可用。
     

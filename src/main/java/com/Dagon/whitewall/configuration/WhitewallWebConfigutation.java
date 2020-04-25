@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Component
-public class WhitewallWebConfigutation extends WebMvcConfigurerAdapter{
+public class WhitewallWebConfigutation extends WebMvcConfigurerAdapter {
 
     @Autowired
     PassportInterceptor passportInterceptor;

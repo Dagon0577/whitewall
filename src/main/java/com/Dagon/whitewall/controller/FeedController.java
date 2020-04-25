@@ -21,6 +21,7 @@ import java.util.List;
 
 @Controller
 public class FeedController {
+
     private static final Logger logger = LoggerFactory.getLogger(FeedController.class);
 
     @Autowired
@@ -51,12 +52,13 @@ public class FeedController {
     }
 
     @RequestMapping(path = {"/pullfeeds"}, method = {RequestMethod.GET, RequestMethod.POST})
-    private String getPullFeeds(Model model){
+    private String getPullFeeds(Model model) {
         int localUserId = hostHolder.getUser() != null ? hostHolder.getUser().getId() : 0;
         List<Integer> followees = new ArrayList<>();
         if (localUserId != 0) {
             // 关注的人
-            followees = followService.getFollowees(localUserId, EntityType.ENTITY_USER, Integer.MAX_VALUE);
+            followees = followService
+                .getFollowees(localUserId, EntityType.ENTITY_USER, Integer.MAX_VALUE);
         }
         List<Feed> feeds = feedService.getUserFeeds(Integer.MAX_VALUE, followees, 10);
         model.addAttribute("feeds", feeds);

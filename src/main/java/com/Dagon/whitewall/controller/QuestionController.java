@@ -19,7 +19,8 @@ import java.util.List;
 
 @Controller
 public class QuestionController {
-    private static final Logger logger= LoggerFactory.getLogger(QuestionController.class);
+
+    private static final Logger logger = LoggerFactory.getLogger(QuestionController.class);
 
     @Autowired
     QuestionService questionService;
@@ -42,54 +43,59 @@ public class QuestionController {
     @Autowired
     EventProducer eventProducer;
 
-    @RequestMapping(value = "/question/add",method = {RequestMethod.POST})
+    @RequestMapping(value = "/question/add", method = {RequestMethod.POST})
     @ResponseBody
-    public String addQuestion(@RequestParam("title") String title,@RequestParam("content")String content){
-        try{
-            Question question=new Question();
+    public String addQuestion(@RequestParam("title") String title,
+        @RequestParam("content") String content) {
+        try {
+            Question question = new Question();
             question.setContent(content);
             question.setTitle(title);
             question.setCreatedDate(new Date());
             //question.setCommentCount(0);
-            if(hostHolder.getUser()==null) {
+            if (hostHolder.getUser() == null) {
                 //question.setUserId(WhitewallUtil.ANONYMOUS_USERID);
                 return WhitewallUtil.getJSONString(999);
-            }else{
+            } else {
                 question.setUserId(hostHolder.getUser().getId());
             }
-            if(questionService.addQuestion(question)>0){
+            if (questionService.addQuestion(question) > 0) {
                 eventProducer.fireEvent(new EventModel(EventType.ADD_QUESTION)
-                .setActorId(question.getUserId()).setEntityId(question.getId())
-                .setExt("title", question.getTitle()).setExt("content", question.getContent()));
+                    .setActorId(question.getUserId()).setEntityId(question.getId())
+                    .setExt("title", question.getTitle()).setExt("content", question.getContent()));
                 return WhitewallUtil.getJSONString(0);
             }
-        }catch (Exception e){
-            logger.error("增加问题失败"+e.getMessage());
+        } catch (Exception e) {
+            logger.error("增加问题失败" + e.getMessage());
         }
-        return WhitewallUtil.getJSONString(1,"失败");
+        return WhitewallUtil.getJSONString(1, "失败");
     }
 
     @RequestMapping(value = "/question/{qid}")
-    public String questionDetail(Model model,@PathVariable("qid")int qid){
-        Question question=questionService.getById(qid);
-        model.addAttribute("question",question);
+    public String questionDetail(Model model, @PathVariable("qid") int qid) {
+        Question question = questionService.getById(qid);
+        model.addAttribute("question", question);
 
-        List<Comment> commentList=commentService.getCommentsByEntity(qid, EntityType.ENTITY_QUESTION);
-        List<ViewObject> comments=new ArrayList<>();
-        for(Comment comment:commentList){
-            ViewObject vo=new ViewObject();
-            vo.set("comment",comment);
-            if(hostHolder.getUser() == null){
+        List<Comment> commentList = commentService
+            .getCommentsByEntity(qid, EntityType.ENTITY_QUESTION);
+        List<ViewObject> comments = new ArrayList<>();
+        for (Comment comment : commentList) {
+            ViewObject vo = new ViewObject();
+            vo.set("comment", comment);
+            if (hostHolder.getUser() == null) {
                 vo.set("liked", 0);
-            }else{
-                vo.set("liked", likeService.getLikeStatus(hostHolder.getUser().getId(), EntityType.ENTITY_COMMENT,comment.getId()));
+            } else {
+                vo.set("liked", likeService
+                    .getLikeStatus(hostHolder.getUser().getId(), EntityType.ENTITY_COMMENT,
+                        comment.getId()));
             }
 
-            vo.set("likeCount", likeService.getLikeCount(EntityType.ENTITY_COMMENT,comment.getId()));
-            vo.set("user",userService.getUser(comment.getUserId()));
+            vo.set("likeCount",
+                likeService.getLikeCount(EntityType.ENTITY_COMMENT, comment.getId()));
+            vo.set("user", userService.getUser(comment.getUserId()));
             comments.add(vo);
         }
-        model.addAttribute("comments",comments);
+        model.addAttribute("comments", comments);
 
         List<ViewObject> followUsers = new ArrayList<ViewObject>();
         // 获取关注的用户信息
@@ -107,7 +113,9 @@ public class QuestionController {
         }
         model.addAttribute("followUsers", followUsers);
         if (hostHolder.getUser() != null) {
-            model.addAttribute("followed", followService.isFollower(hostHolder.getUser().getId(), EntityType.ENTITY_QUESTION, qid));
+            model.addAttribute("followed",
+                followService
+                    .isFollower(hostHolder.getUser().getId(), EntityType.ENTITY_QUESTION, qid));
         } else {
             model.addAttribute("followed", false);
         }

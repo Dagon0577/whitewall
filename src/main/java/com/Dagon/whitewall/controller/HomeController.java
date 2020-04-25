@@ -18,7 +18,8 @@ import java.util.List;
 
 @Controller
 public class HomeController {
-    private static final Logger logger= LoggerFactory.getLogger(HomeController.class);
+
+    private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
     @Autowired
     QuestionService questionService;
@@ -37,7 +38,7 @@ public class HomeController {
 
     @RequestMapping(path = {"/", "/index"}, method = {RequestMethod.GET, RequestMethod.POST})
     public String index(Model model,
-                        @RequestParam(value = "pop", defaultValue = "0") int pop) {
+        @RequestParam(value = "pop", defaultValue = "0") int pop) {
         model.addAttribute("vos", getQuestions(0, 0, 10));
         return "index";
     }
@@ -53,7 +54,9 @@ public class HomeController {
         vo.set("followerCount", followService.getFollowerCount(EntityType.ENTITY_USER, userId));
         vo.set("followeeCount", followService.getFolloweeCount(userId, EntityType.ENTITY_USER));
         if (hostHolder.getUser() != null) {
-            vo.set("followed", followService.isFollower(hostHolder.getUser().getId(), EntityType.ENTITY_USER, userId));
+            vo.set("followed",
+                followService
+                    .isFollower(hostHolder.getUser().getId(), EntityType.ENTITY_USER, userId));
         } else {
             vo.set("followed", false);
         }
@@ -67,7 +70,8 @@ public class HomeController {
         for (Question question : questionList) {
             ViewObject vo = new ViewObject();
             vo.set("question", question);
-            vo.set("followCount", followService.getFollowerCount(EntityType.ENTITY_QUESTION, question.getId()));
+            vo.set("followCount",
+                followService.getFollowerCount(EntityType.ENTITY_QUESTION, question.getId()));
             vo.set("user", userService.getUser(question.getUserId()));
             vos.add(vo);
         }

@@ -1,3 +1,4 @@
+USE whitewall;
 DROP TABLE IF EXISTS `question`;
 CREATE TABLE `question` (
   `id` INT NOT NULL AUTO_INCREMENT,

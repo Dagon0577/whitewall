@@ -3,6 +3,7 @@ package com.Dagon.whitewall.model;
 import java.util.Date;
 
 public class Comment {
+
     private int id;
     private int userId;
     private int entityId;

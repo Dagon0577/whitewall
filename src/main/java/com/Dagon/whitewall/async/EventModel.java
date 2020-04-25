@@ -4,28 +4,29 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EventModel {
+
     private EventType type;
     private int actorId;
     private int entityType;
     private int entityId;
     private int entityOwnerId;
 
-    private Map<String,String> exts = new HashMap<String,String>();
+    private Map<String, String> exts = new HashMap<String, String>();
 
-    public EventModel(){
+    public EventModel() {
 
     }
 
-    public EventModel(EventType type){
-        this.type=type;
+    public EventModel(EventType type) {
+        this.type = type;
     }
 
-    public EventModel setExt(String key, String value){
+    public EventModel setExt(String key, String value) {
         exts.put(key, value);
         return this;
     }
 
-    public String getExt(String key){
+    public String getExt(String key) {
         return exts.get(key);
     }
 

@@ -12,13 +12,13 @@ public class EventProducer {
     @Autowired
     JedisAdapter jedisAdapter;
 
-    public boolean fireEvent(EventModel eventModel){
-        try{
+    public boolean fireEvent(EventModel eventModel) {
+        try {
             String json = JSONObject.toJSONString(eventModel);
             String key = RedisKeyUtil.getEventQueueKey();
             jedisAdapter.lpush(key, json);
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
